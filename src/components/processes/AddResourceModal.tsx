@@ -1,20 +1,20 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { FiSearch, FiX, FiPlus, FiCheck } from 'react-icons/fi';
-import Modal from '@/components/ui/Modal';
-import Button from '@/components/ui/Button';
-import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import DocumentModal from '@/components/documents/DocumentModal';
 import PersonModal from '@/components/people/PersonModal';
 import ToolModal from '@/components/tools/ToolModal';
-import DocumentModal from '@/components/documents/DocumentModal';
-import { personService } from '@/services/people';
-import { toolService } from '@/services/tools';
-import { documentService } from '@/services/documents';
-import { processService } from '@/services/processes';
+import Button from '@/components/ui/Button';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import Modal from '@/components/ui/Modal';
 import { useDebounce } from '@/hooks/useDebounce';
+import { documentService } from '@/services/documents';
+import { personService } from '@/services/people';
+import { processService } from '@/services/processes';
+import { toolService } from '@/services/tools';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { FiCheck, FiPlus, FiSearch } from 'react-icons/fi';
 
 type ResourceType = 'people' | 'tools' | 'documents';
 
@@ -96,7 +96,7 @@ export default function AddResourceModal({
   }, [isOpen]);
 
   // Fetch resources
-  const { data: resourcesResponse, isLoading } = useQuery({
+  const { data: resourcesResponse, isLoading } = useQuery<any>({
     queryKey: [resourceType, 'modal', debouncedSearch, currentPage],
     queryFn: () => config.service.getAll(debouncedSearch, currentPage, itemsPerPage),
     placeholderData: (previousData: any) => previousData,
@@ -181,29 +181,27 @@ export default function AddResourceModal({
                 return (
                   <div
                     key={item.id}
-                    className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${
-                      isAlreadyLinked
-                        ? 'bg-gray-700/30 border-gray-600 opacity-50 cursor-not-allowed'
-                        : isSelected
+                    className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${isAlreadyLinked
+                      ? 'bg-gray-700/30 border-gray-600 opacity-50 cursor-not-allowed'
+                      : isSelected
                         ? 'bg-primary-500/20 border-primary-500 cursor-pointer'
                         : 'bg-gray-700/50 border-gray-600 hover:bg-gray-700 cursor-pointer'
-                    }`}
+                      }`}
                     onClick={() => !isAlreadyLinked && handleToggleSelection(item.id)}
                   >
                     <div className="flex items-center gap-3 flex-1 min-w-0">
                       {/* Checkbox */}
                       {!isAlreadyLinked && (
                         <div
-                          className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-                            isSelected
-                              ? 'bg-primary-500 border-primary-500'
-                              : 'border-gray-500'
-                          }`}
+                          className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${isSelected
+                            ? 'bg-primary-500 border-primary-500'
+                            : 'border-gray-500'
+                            }`}
                         >
                           {isSelected && <FiCheck className="w-3 h-3 text-white" />}
                         </div>
                       )}
-                      
+
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-gray-200 truncate">
                           {config.getDisplayName(item)}
@@ -215,7 +213,7 @@ export default function AddResourceModal({
                         )}
                       </div>
                     </div>
-                    
+
                     {isAlreadyLinked && (
                       <div className="flex items-center gap-2 text-green-500 ml-4">
                         <FiCheck className="w-5 h-5" />
@@ -251,7 +249,7 @@ export default function AddResourceModal({
             >
               Anterior
             </Button>
-            
+
             <span className="text-sm text-gray-300 px-3">
               Página {currentPage} de {totalPages}
             </span>
@@ -278,11 +276,10 @@ export default function AddResourceModal({
             onClick={handleLinkSelected}
             disabled={selectedIds.length === 0 || addMutation.isPending}
             isLoading={addMutation.isPending}
-            className={`transition-colors ${
-              selectedIds.length === 0
-                ? 'bg-gray-700 text-gray-400 cursor-not-allowed hover:bg-gray-700'
-                : 'bg-green-600 hover:bg-green-700 text-white'
-            }`}
+            className={`transition-colors ${selectedIds.length === 0
+              ? 'bg-gray-700 text-gray-400 cursor-not-allowed hover:bg-gray-700'
+              : 'bg-green-600 hover:bg-green-700 text-white'
+              }`}
           >
             Vincular {selectedIds.length > 0 && `(${selectedIds.length})`}
           </Button>
