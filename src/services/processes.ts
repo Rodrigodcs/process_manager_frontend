@@ -49,10 +49,6 @@ export const processService = {
     return data;
   },
 
-  async addPerson(processId: string, personId: string): Promise<void> {
-    await api.post(`/processes/${processId}/people/${personId}`);
-  },
-
   async addPeople(processId: string, personIds: string[]): Promise<{ linked: number; skipped: number }> {
     const { data } = await api.post(`/processes/${processId}/people/bulk`, { personIds });
     return data;
@@ -68,10 +64,6 @@ export const processService = {
     return data;
   },
 
-  async addTool(processId: string, toolId: string): Promise<void> {
-    await api.post(`/processes/${processId}/tools/${toolId}`);
-  },
-
   async addTools(processId: string, toolIds: string[]): Promise<{ linked: number; skipped: number }> {
     const { data } = await api.post(`/processes/${processId}/tools/bulk`, { toolIds });
     return data;
@@ -85,10 +77,6 @@ export const processService = {
   async getDocuments(processId: string): Promise<Document[]> {
     const { data } = await api.get<Document[]>(`/processes/${processId}/documents`);
     return data;
-  },
-
-  async addDocument(processId: string, documentId: string): Promise<void> {
-    await api.post(`/processes/${processId}/documents/${documentId}`);
   },
 
   async addDocuments(processId: string, documentIds: string[]): Promise<{ linked: number; skipped: number }> {
