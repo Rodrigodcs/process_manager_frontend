@@ -95,6 +95,15 @@ export default function ProcessTree({
     };
 
     const handleSelectProcess = () => {
+        // Expand the process if it has children
+        if (hasChildren && !isExpanded) {
+            if (onToggleExpand) {
+                onToggleExpand(process.id);
+            } else {
+                setInternalExpanded(true);
+            }
+        }
+        // Open the detail panel
         onSelectProcess(process);
     };
 
@@ -168,10 +177,10 @@ export default function ProcessTree({
                                 e.stopPropagation();
                                 onAddSubprocess(process);
                             }}
-                            className="opacity-0 group-hover:opacity-100 flex items-center justify-center w-6 h-6 text-gray-400 hover:text-primary-400 hover:bg-gray-700 rounded transition-all"
+                            className="flex items-center justify-center w-7 h-7 bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 hover:text-blue-300 rounded-lg transition-all hover:scale-110"
                             title="Adicionar subprocesso"
                         >
-                            <FiPlus className="w-4 h-4" />
+                            <FiPlus className="w-5 h-5 font-bold" />
                         </button>
                     )}
                 </div>

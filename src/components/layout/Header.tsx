@@ -1,6 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
+import UserMenu from './UserMenu';
 
 const pageTitles: Record<string, string> = {
   '/': 'Dashboard',
@@ -25,8 +26,9 @@ export default function Header() {
 
   return (
     <header className="bg-[#1a1f2e] shadow-lg border-b-2 border-gray-700/50">
-      <div className="px-6 py-4">
+      <div className="px-6 py-4 flex items-center justify-between">
         <h1 className="text-2xl font-semibold text-white">{title}</h1>
+        <UserMenu />
       </div>
     </header>
   );

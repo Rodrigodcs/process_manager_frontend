@@ -134,9 +134,16 @@ export default function ProcessDetailPanel({ process, onClose }: ProcessDetailPa
   const deleteProcessMutation = useMutation({
     mutationFn: () => processService.delete(process.id),
     onSuccess: () => {
+      // Invalidate all processes queries
       queryClient.invalidateQueries({ queryKey: ['processes'] });
+      // Invalidate department processes
       queryClient.invalidateQueries({ queryKey: ['department', process.departmentId] });
-      queryClient.invalidateQueries({ queryKey: ['processChildren', process.parentId] });
+      // Invalidate parent's children if this is a subprocess
+      if (process.parentId) {
+        queryClient.invalidateQueries({ queryKey: ['process-children', process.parentId] });
+      }
+      // Invalidate all process-children queries to update the entire tree
+      queryClient.invalidateQueries({ queryKey: ['process-children'] });
       toast.success('Processo excluído com sucesso!');
       onClose();
     },

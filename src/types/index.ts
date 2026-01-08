@@ -166,3 +166,31 @@ export interface UpdateDocumentDto {
   url?: string;
 }
 
+// Auth types
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  color?: string;
+  icon?: string;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface SignInDto {
+  email: string;
+  password: string;
+}
+
+export interface SignUpDto {
+  name: string;
+  email: string;
+  password: string;
+  color?: string;
+  icon?: string;
+}
+
+export interface AuthResponse {
+  token: string;
+}
+
