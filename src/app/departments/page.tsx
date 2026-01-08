@@ -56,16 +56,16 @@ const COLOR_BG_HOVER_MAP: Record<string, string> = {
 };
 
 const COLOR_BADGE_MAP: Record<string, string> = {
-  blue: 'bg-blue-100 text-blue-700',
-  green: 'bg-green-100 text-green-700',
-  purple: 'bg-purple-100 text-purple-700',
-  pink: 'bg-pink-100 text-pink-700',
-  orange: 'bg-orange-100 text-orange-700',
-  red: 'bg-red-100 text-red-700',
-  yellow: 'bg-yellow-100 text-yellow-700',
-  cyan: 'bg-cyan-100 text-cyan-700',
-  indigo: 'bg-indigo-100 text-indigo-700',
-  gray: 'bg-gray-100 text-gray-700',
+  blue: 'bg-blue-500 text-white',
+  green: 'bg-green-500 text-white',
+  purple: 'bg-purple-500 text-white',
+  pink: 'bg-pink-500 text-white',
+  orange: 'bg-orange-500 text-white',
+  red: 'bg-red-500 text-white',
+  yellow: 'bg-yellow-500 text-white',
+  cyan: 'bg-cyan-500 text-white',
+  indigo: 'bg-indigo-500 text-white',
+  gray: 'bg-gray-500 text-white',
 };
 
 export default function DepartmentsPage() {

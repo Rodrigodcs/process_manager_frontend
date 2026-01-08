@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FiFileText, FiFolder, FiGitBranch, FiTool, FiUsers } from 'react-icons/fi';
+import { FiFileText, FiFolder, FiTool, FiUsers } from 'react-icons/fi';
 
 export default function Home() {
     const cards = [
@@ -9,13 +9,6 @@ export default function Home() {
             icon: FiFolder,
             href: '/departments',
             color: 'bg-blue-500',
-        },
-        {
-            title: 'Processos',
-            description: 'Visualize e organize processos e subprocessos',
-            icon: FiGitBranch,
-            href: '/processes',
-            color: 'bg-green-500',
         },
         {
             title: 'Pessoas',
