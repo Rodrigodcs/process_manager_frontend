@@ -3,12 +3,11 @@
 import clsx from 'clsx';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FiFileText, FiFolder, FiGitBranch, FiHome, FiTool, FiUsers } from 'react-icons/fi';
+import { FiFileText, FiFolder, FiHome, FiTool, FiUsers } from 'react-icons/fi';
 
 const navigation = [
   { name: 'Início', href: '/', icon: FiHome },
   { name: 'Departamentos', href: '/departments', icon: FiFolder },
-  { name: 'Processos', href: '/processes', icon: FiGitBranch },
   { name: 'Pessoas', href: '/people', icon: FiUsers },
   { name: 'Ferramentas', href: '/tools', icon: FiTool },
   { name: 'Documentos', href: '/documents', icon: FiFileText },
