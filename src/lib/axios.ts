@@ -1,8 +1,8 @@
-import axios from 'axios';
 import { authService } from '@/services/auth';
+import axios from 'axios';
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000',
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -27,7 +27,7 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     const message = error.response?.data?.message || error.message || 'An error occurred';
-    
+
     // If 401, user is unauthorized - could redirect to login
     if (error.response?.status === 401) {
       // Could call logout here if needed
@@ -39,7 +39,7 @@ api.interceptors.response.use(
         }
       }
     }
-    
+
     return Promise.reject(new Error(message));
   }
 );

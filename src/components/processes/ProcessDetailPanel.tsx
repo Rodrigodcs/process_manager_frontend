@@ -1,35 +1,31 @@
 'use client';
 
+import DocumentModal from '@/components/documents/DocumentModal';
+import PersonModal from '@/components/people/PersonModal';
+import ToolModal from '@/components/tools/ToolModal';
+import ConfirmModal from '@/components/ui/ConfirmModal';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { processService } from '@/services/processes';
+import { Process, ProcessStatus, ProcessType } from '@/types';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 import {
   FiCircle,
   FiCpu,
-  FiCheckCircle,
-  FiAlertCircle,
-  FiXCircle,
-  FiTool,
-  FiUsers,
-  FiFileText,
-  FiExternalLink,
-  FiMail,
-  FiPlus,
   FiEdit2,
-  FiTrash2,
+  FiExternalLink,
+  FiFileText,
+  FiMail,
   FiMoreVertical,
-  FiX,
+  FiPlus,
+  FiTool,
+  FiTrash2,
+  FiUsers,
+  FiX
 } from 'react-icons/fi';
-import { Process, ProcessType, ProcessStatus } from '@/types';
-import { processService } from '@/services/processes';
-import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import Button from '@/components/ui/Button';
 import AddResourceModal from './AddResourceModal';
-import PersonModal from '@/components/people/PersonModal';
-import ToolModal from '@/components/tools/ToolModal';
-import DocumentModal from '@/components/documents/DocumentModal';
 import ProcessModal from './ProcessModal';
-import ConfirmModal from '@/components/ui/ConfirmModal';
-import toast from 'react-hot-toast';
 
 interface ProcessDetailPanelProps {
   process: Process;
@@ -69,17 +65,17 @@ export default function ProcessDetailPanel({ process, onClose }: ProcessDetailPa
     isOpen: boolean;
     type: 'people' | 'tools' | 'documents' | null;
   }>({ isOpen: false, type: null });
-  
+
   const [viewModalState, setViewModalState] = useState<{
     isOpen: boolean;
     type: 'person' | 'tool' | 'document' | null;
     item: any;
   }>({ isOpen: false, type: null, item: null });
-  
+
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
-  
+
   const queryClient = useQueryClient();
 
   // Fetch detailed process information
@@ -179,11 +175,10 @@ export default function ProcessDetailPanel({ process, onClose }: ProcessDetailPa
           </div>
           <div className="flex items-center gap-2">
             <span
-              className={`px-2 py-1 rounded text-xs ${
-                process.type === ProcessType.SYSTEMIC
-                  ? 'bg-blue-500/20 text-blue-400'
-                  : 'bg-purple-500/20 text-purple-400'
-              }`}
+              className={`px-2 py-1 rounded text-xs ${process.type === ProcessType.SYSTEMIC
+                ? 'bg-blue-500/20 text-blue-400'
+                : 'bg-purple-500/20 text-purple-400'
+                }`}
             >
               {TYPE_LABELS[process.type]}
             </span>
@@ -506,8 +501,8 @@ export default function ProcessDetailPanel({ process, onClose }: ProcessDetailPa
             addModalState.type === 'tools'
               ? tools.map((t: any) => t.id)
               : addModalState.type === 'people'
-              ? people.map((p: any) => p.id)
-              : documents.map((d: any) => d.id)
+                ? people.map((p: any) => p.id)
+                : documents.map((d: any) => d.id)
           }
         />
       )}
