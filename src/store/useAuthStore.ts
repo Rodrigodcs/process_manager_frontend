@@ -8,8 +8,6 @@ interface AuthState {
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  
-  // Actions
   setUser: (user: User | null) => void;
   setToken: (token: string | null) => void;
   login: (token: string) => Promise<void>;
@@ -28,7 +26,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   
   setToken: (token) => set({ token, isAuthenticated: !!token }),
 
-  // Login and fetch user data
   login: async (token) => {
     authService.storeAuth(token);
     
@@ -37,25 +34,21 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       isAuthenticated: true,
     });
 
-    // Fetch user data from /auth/me
     try {
       const user = await authService.getMe();
       set({ user });
     } catch (error) {
       console.error('Error fetching user data:', error);
-      // If fails to fetch user, logout
       get().logout();
     }
   },
 
-  // Fetch user data from backend
   fetchUser: async () => {
     try {
       const user = await authService.getMe();
       set({ user });
     } catch (error) {
       console.error('Error fetching user:', error);
-      // If fails to fetch user, logout
       get().logout();
     }
   },
@@ -69,7 +62,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     });
   },
 
-  // Initialize auth from localStorage
   initAuth: async () => {
     const token = authService.getToken();
     
@@ -79,7 +71,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         isAuthenticated: true,
       });
 
-      // Fetch user data from backend
       try {
         const user = await authService.getMe();
         set({ 
@@ -88,7 +79,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         });
       } catch (error) {
         console.error('Error fetching user on init:', error);
-        // If fails to fetch user, clear auth
         authService.clearAuth();
         set({ 
           token: null,
@@ -97,7 +87,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         });
       }
     } else {
-      // No token or expired
       authService.clearAuth();
       set({ isLoading: false });
     }

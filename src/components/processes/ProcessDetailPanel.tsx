@@ -78,7 +78,6 @@ export default function ProcessDetailPanel({ process, onClose }: ProcessDetailPa
 
   const queryClient = useQueryClient();
 
-  // Fetch detailed process information
   const { data: detailedProcess, isLoading } = useQuery<Process>({
     queryKey: ['process', process.id],
     queryFn: () => processService.getById(process.id),
@@ -88,12 +87,10 @@ export default function ProcessDetailPanel({ process, onClose }: ProcessDetailPa
   const statusColor = STATUS_COLORS[process.status];
   const statusBgColor = STATUS_BG_COLORS[process.status];
 
-  // Extract tools, people, and documents from the detailed process
   const tools = detailedProcess?.tools?.map((pt: any) => pt.tool) || [];
   const people = detailedProcess?.people?.map((pp: any) => pp.person) || [];
   const documents = detailedProcess?.documents?.map((pd: any) => pd.document) || [];
 
-  // Mutations for removing resources
   const removeToolMutation = useMutation({
     mutationFn: (toolId: string) => processService.removeTool(process.id, toolId),
     onSuccess: () => {
@@ -130,15 +127,11 @@ export default function ProcessDetailPanel({ process, onClose }: ProcessDetailPa
   const deleteProcessMutation = useMutation({
     mutationFn: () => processService.delete(process.id),
     onSuccess: () => {
-      // Invalidate all processes queries
       queryClient.invalidateQueries({ queryKey: ['processes'] });
-      // Invalidate department processes
       queryClient.invalidateQueries({ queryKey: ['department', process.departmentId] });
-      // Invalidate parent's children if this is a subprocess
       if (process.parentId) {
         queryClient.invalidateQueries({ queryKey: ['process-children', process.parentId] });
       }
-      // Invalidate all process-children queries to update the entire tree
       queryClient.invalidateQueries({ queryKey: ['process-children'] });
       toast.success('Processo excluído com sucesso!');
       onClose();
@@ -166,7 +159,6 @@ export default function ProcessDetailPanel({ process, onClose }: ProcessDetailPa
 
   return (
     <div className="w-1/3 bg-gray-800 rounded-lg border border-gray-700 flex flex-col h-full overflow-hidden">
-      {/* Header */}
       <div className="p-4 border-b border-gray-700 flex items-start justify-between">
         <div className="flex-1 min-w-0 pr-4">
           <div className="flex items-center gap-2 mb-2">
@@ -212,7 +204,6 @@ export default function ProcessDetailPanel({ process, onClose }: ProcessDetailPa
         </div>
       </div>
 
-      {/* Content */}
       <div className="flex-1 overflow-y-auto p-4 space-y-6">
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
@@ -220,7 +211,6 @@ export default function ProcessDetailPanel({ process, onClose }: ProcessDetailPa
           </div>
         ) : (
           <>
-            {/* Description */}
             {detailedProcess?.description && (
               <div>
                 <h3 className="text-sm font-semibold text-gray-300 mb-2">Descrição</h3>
@@ -230,7 +220,6 @@ export default function ProcessDetailPanel({ process, onClose }: ProcessDetailPa
               </div>
             )}
 
-            {/* Tools & Systems */}
             <div>
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-semibold text-gray-300 flex items-center gap-2">
@@ -316,7 +305,6 @@ export default function ProcessDetailPanel({ process, onClose }: ProcessDetailPa
               )}
             </div>
 
-            {/* Responsible People */}
             <div>
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-semibold text-gray-300 flex items-center gap-2">
@@ -401,7 +389,6 @@ export default function ProcessDetailPanel({ process, onClose }: ProcessDetailPa
               )}
             </div>
 
-            {/* Documentation */}
             <div>
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-semibold text-gray-300 flex items-center gap-2">
@@ -490,7 +477,6 @@ export default function ProcessDetailPanel({ process, onClose }: ProcessDetailPa
         )}
       </div>
 
-      {/* Add Resource Modal */}
       {addModalState.isOpen && addModalState.type && (
         <AddResourceModal
           isOpen={addModalState.isOpen}
@@ -507,7 +493,6 @@ export default function ProcessDetailPanel({ process, onClose }: ProcessDetailPa
         />
       )}
 
-      {/* View Item Modals */}
       {viewModalState.isOpen && viewModalState.type === 'person' && (
         <PersonModal
           isOpen={viewModalState.isOpen}
@@ -535,14 +520,12 @@ export default function ProcessDetailPanel({ process, onClose }: ProcessDetailPa
         />
       )}
 
-      {/* Edit Process Modal */}
       <ProcessModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         process={detailedProcess || process}
       />
 
-      {/* Delete Confirmation Modal */}
       <ConfirmModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}

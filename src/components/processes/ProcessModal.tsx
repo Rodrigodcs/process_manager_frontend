@@ -80,11 +80,8 @@ export default function ProcessModal({
       queryClient.invalidateQueries({ queryKey: ['departments'] });
       queryClient.invalidateQueries({ queryKey: ['department', newProcess.departmentId] });
       if (newProcess.parentId) {
-        // Invalidate the children query to refresh the tree
         queryClient.invalidateQueries({ queryKey: ['process-children', newProcess.parentId] });
-        // Also invalidate the parent process to update childrenIds
         queryClient.invalidateQueries({ queryKey: ['process', newProcess.parentId] });
-        // Expand the parent process to show the new subprocess
         if (onSubprocessCreated) {
           onSubprocessCreated(newProcess.parentId);
         }
@@ -105,9 +102,7 @@ export default function ProcessModal({
       queryClient.invalidateQueries({ queryKey: ['departments'] });
       queryClient.invalidateQueries({ queryKey: ['process', variables.id] });
       queryClient.invalidateQueries({ queryKey: ['department', updatedProcess.departmentId] });
-      // Invalidate all process-children queries in case parent changed
       queryClient.invalidateQueries({ queryKey: ['process-children'] });
-      // If process has a parent, invalidate its parent's children
       if (updatedProcess.parentId) {
         queryClient.invalidateQueries({ queryKey: ['process-children', updatedProcess.parentId] });
       }
@@ -144,8 +139,8 @@ export default function ProcessModal({
       description: formData.description || undefined,
       type: formData.type,
       status: formData.status,
-      departmentId: departmentId || formData.departmentId, // Use prop departmentId if available
-      parentId: parentId || formData.parentId || undefined, // Use prop parentId if available
+      departmentId: departmentId || formData.departmentId,
+      parentId: parentId || formData.parentId || undefined,
     };
 
     if (process) {
@@ -216,7 +211,6 @@ export default function ProcessModal({
           />
         </div>
 
-        {/* Only show department selector if not provided as prop */}
         {!departmentId && (
           <Select
             label="Departamento"
@@ -231,7 +225,6 @@ export default function ProcessModal({
           />
         )}
 
-        {/* Only show parent process selector if not tied to a specific department (general process creation) */}
         {!departmentId && formData.departmentId && (
           <Select
             label="Processo Pai (opcional)"

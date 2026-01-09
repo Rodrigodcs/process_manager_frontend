@@ -79,13 +79,11 @@ export default function AddResourceModal({
 
   const config = RESOURCE_CONFIG[resourceType];
 
-  // Reset to page 1 when search changes
   const handleSearchChange = (value: string) => {
     setSearchTerm(value);
     setCurrentPage(1);
   };
 
-  // Reset modal state when it opens
   useEffect(() => {
     if (isOpen) {
       setSearchTerm('');
@@ -95,7 +93,6 @@ export default function AddResourceModal({
     }
   }, [isOpen]);
 
-  // Fetch resources
   const { data: resourcesResponse, isLoading } = useQuery<any>({
     queryKey: [resourceType, 'modal', debouncedSearch, currentPage],
     queryFn: () => config.service.getAll(debouncedSearch, currentPage, itemsPerPage),
@@ -103,12 +100,10 @@ export default function AddResourceModal({
     enabled: isOpen,
   });
 
-  // Extract resources from paginated response
   const resourcesList = resourcesResponse?.data || [];
   const totalPages = resourcesResponse?.meta?.totalPages || 1;
   const totalItems = resourcesResponse?.meta?.total || 0;
 
-  // Mutation to add multiple resources
   const addMutation = useMutation({
     mutationFn: (resourceIds: string[]) =>
       config.processService.addBulk(processId, resourceIds),
@@ -142,7 +137,6 @@ export default function AddResourceModal({
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={config.title} size="lg">
       <div className="flex flex-col h-[600px]">
-        {/* Header with Create Button */}
         <div className="flex items-center gap-3 mb-4">
           <div className="relative flex-1">
             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -163,7 +157,6 @@ export default function AddResourceModal({
           </Button>
         </div>
 
-        {/* List - Fixed height */}
         <div className="flex-1 overflow-y-auto mb-4">
           {isLoading ? (
             <div className="flex items-center justify-center h-full">
@@ -190,7 +183,6 @@ export default function AddResourceModal({
                     onClick={() => !isAlreadyLinked && handleToggleSelection(item.id)}
                   >
                     <div className="flex items-center gap-3 flex-1 min-w-0">
-                      {/* Checkbox */}
                       {!isAlreadyLinked && (
                         <div
                           className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${isSelected
@@ -227,7 +219,6 @@ export default function AddResourceModal({
           )}
         </div>
 
-        {/* Pagination */}
         <div className="flex items-center justify-between pt-4 border-t border-gray-700">
           <div className="text-sm text-gray-400">
             {totalItems > 0 ? (
@@ -265,7 +256,6 @@ export default function AddResourceModal({
           </div>
         </div>
 
-        {/* Footer with Link Button */}
         <div className="flex justify-between items-center pt-4 border-t border-gray-700 mt-4">
           <div className="text-sm text-gray-400">
             {selectedIds.length > 0 && (
@@ -286,7 +276,6 @@ export default function AddResourceModal({
         </div>
       </div>
 
-      {/* Creation Modals */}
       {resourceType === 'people' && (
         <PersonModal
           isOpen={isCreateModalOpen}

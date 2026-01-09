@@ -8,7 +8,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isLoginPage = pathname === '/login';
 
-  // If on login page, don't show sidebar and header
   if (isLoginPage) {
     return <>{children}</>;
   }

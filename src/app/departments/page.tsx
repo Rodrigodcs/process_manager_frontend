@@ -169,7 +169,6 @@ export default function DepartmentsPage() {
               >
                 <Card className="h-full transition-all duration-200 hover:shadow-xl hover:-translate-y-1 hover:bg-gray-750 cursor-pointer border-2 border-transparent hover:border-gray-600">
                   <CardBody className="p-6 h-full flex flex-col">
-                    {/* Header com ícone e seta */}
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-start space-x-3 flex-1 min-w-0">
                         <div className={clsx('p-3 rounded-lg text-white flex-shrink-0', colorClass)}>
@@ -192,7 +191,6 @@ export default function DepartmentsPage() {
                       />
                     </div>
 
-                    {/* Descrição com altura fixa */}
                     <div className="flex-1 mb-4">
                       {department.description ? (
                         <p className="text-sm text-gray-400 line-clamp-3">
@@ -205,7 +203,6 @@ export default function DepartmentsPage() {
                       )}
                     </div>
 
-                    {/* Footer fixo na parte inferior */}
                     <div className="flex items-center justify-between pt-4 border-t border-gray-700 mt-auto">
                       <span className={clsx(
                         'px-3 py-1 rounded-full text-sm font-medium',

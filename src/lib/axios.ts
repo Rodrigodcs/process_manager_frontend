@@ -8,7 +8,6 @@ const api = axios.create({
   },
 });
 
-// Request interceptor to add token
 api.interceptors.request.use(
   (config) => {
     const token = authService.getToken();
@@ -22,18 +21,14 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor for error handling
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     const message = error.response?.data?.message || error.message || 'An error occurred';
 
-    // If 401, user is unauthorized - could redirect to login
     if (error.response?.status === 401) {
-      // Could call logout here if needed
       if (typeof window !== 'undefined') {
         const pathname = window.location.pathname;
-        // Only redirect if not already on login page
         if (pathname !== '/login') {
           window.location.href = '/login';
         }

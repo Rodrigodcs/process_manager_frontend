@@ -85,7 +85,6 @@ export default function Home() {
 
     return (
         <div className="max-w-7xl mx-auto">
-            {/* Header */}
             <div className="mb-8">
                 <h1 className="text-4xl font-bold text-gray-100 mb-2">Dashboard</h1>
                 <p className="text-lg text-gray-400">
@@ -93,7 +92,6 @@ export default function Home() {
                 </p>
             </div>
 
-            {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <StatsCard
                     title="Total de Processos"
@@ -123,18 +121,15 @@ export default function Home() {
                 />
             </div>
 
-            {/* Charts Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                 <DepartmentChart departments={stats.processesByDepartment} />
                 <ActivityChart recentActivity={stats.recentActivity} />
             </div>
 
-            {/* Process Hierarchy */}
             <div className="mb-8">
                 <ProcessHierarchyCard hierarchy={stats.processHierarchy} />
             </div>
 
-            {/* Quick Access Cards */}
             <div className="mb-8">
                 <h2 className="text-2xl font-bold text-gray-100 mb-4">Acesso Rápido</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -145,8 +140,8 @@ export default function Home() {
                                 key={card.href}
                                 href={card.href}
                                 className={`group block p-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-200 border ${card.highlighted
-                                        ? 'bg-gradient-to-br from-blue-500/20 to-blue-600/10 border-blue-500 hover:border-blue-400 ring-2 ring-blue-500/50'
-                                        : 'bg-gray-800 border-gray-700 hover:border-gray-600'
+                                    ? 'bg-gradient-to-br from-blue-500/20 to-blue-600/10 border-blue-500 hover:border-blue-400 ring-2 ring-blue-500/50'
+                                    : 'bg-gray-800 border-gray-700 hover:border-gray-600'
                                     }`}
                             >
                                 <div className="flex items-start justify-between mb-3">
@@ -171,7 +166,6 @@ export default function Home() {
                 </div>
             </div>
 
-            {/* About System */}
             <div className="bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700">
                 <h2 className="text-xl font-bold text-gray-100 mb-3">Sobre o Sistema</h2>
                 <div className="prose prose-blue max-w-none">

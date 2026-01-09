@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const { initAuth, isAuthenticated, isLoading } = useAuthStore();
@@ -10,24 +10,20 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   const pathname = usePathname();
 
   useEffect(() => {
-    // Initialize auth and fetch user data
     initAuth();
   }, [initAuth]);
 
   useEffect(() => {
     if (!isLoading) {
-      // If not authenticated and not on login page, redirect to login
       if (!isAuthenticated && pathname !== '/login') {
         router.push('/login');
       }
-      // If authenticated and on login page, redirect to home
       else if (isAuthenticated && pathname === '/login') {
         router.push('/');
       }
     }
   }, [isAuthenticated, isLoading, pathname, router]);
 
-  // Show loading state while checking auth
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#0f1419] flex items-center justify-center">

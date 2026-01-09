@@ -23,13 +23,11 @@ export default function DepartmentDetailPage() {
   const [parentProcessForSubprocess, setParentProcessForSubprocess] = useState<Process | null>(null);
   const [expandedProcessIds, setExpandedProcessIds] = useState<Set<string>>(new Set());
 
-  // Fetch department details
   const { data: department, isLoading: isDepartmentLoading } = useQuery<Department>({
     queryKey: ['department', departmentId],
     queryFn: () => departmentService.getById(departmentId),
   });
 
-  // Fetch main processes of the department (paginated)
   const { data: processesData, isLoading: isProcessesLoading } = useQuery({
     queryKey: ['processes', 'department', departmentId],
     queryFn: () => processService.getByDepartment(departmentId, { page: 1, limit: 100 }),
@@ -37,7 +35,6 @@ export default function DepartmentDetailPage() {
 
   const processes = processesData?.data || [];
 
-  // Filter processes by search term
   const filteredProcesses = processes.filter((process) =>
     process.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -67,7 +64,6 @@ export default function DepartmentDetailPage() {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header */}
       <div className="mb-6">
         <Link
           href="/departments"
@@ -95,12 +91,9 @@ export default function DepartmentDetailPage() {
         )}
       </div>
 
-      {/* Main Content */}
       <div className="flex-1 flex gap-6 overflow-hidden">
-        {/* Process Tree Section */}
         <div className={`flex flex-col ${selectedProcess ? 'w-2/3' : 'w-full'} transition-all duration-300`}>
           <div className="bg-gray-800 rounded-lg border border-gray-700 flex flex-col h-full">
-            {/* Search and Title */}
             <div className="p-4 border-b border-gray-700">
               <h2 className="text-xl font-semibold text-gray-100 mb-3">
                 Processos de {department.name}
@@ -114,7 +107,6 @@ export default function DepartmentDetailPage() {
               />
             </div>
 
-            {/* Process List */}
             <div className="flex-1 overflow-y-auto p-4">
               {filteredProcesses.length === 0 ? (
                 <div className="text-center py-12">
@@ -157,7 +149,6 @@ export default function DepartmentDetailPage() {
           </div>
         </div>
 
-        {/* Process Detail Panel */}
         {selectedProcess && (
           <ProcessDetailPanel
             key={selectedProcess.id}
@@ -167,7 +158,6 @@ export default function DepartmentDetailPage() {
         )}
       </div>
 
-      {/* Process Modal */}
       <ProcessModal
         isOpen={isProcessModalOpen}
         onClose={() => {
@@ -177,7 +167,6 @@ export default function DepartmentDetailPage() {
         departmentId={departmentId}
         parentId={parentProcessForSubprocess?.id}
         onSubprocessCreated={(parentId) => {
-          // Expand the parent process to show the new subprocess
           setExpandedProcessIds((prev) => {
             const newSet = new Set(prev);
             newSet.add(parentId);

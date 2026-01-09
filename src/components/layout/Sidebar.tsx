@@ -25,7 +25,6 @@ export default function Sidebar() {
         <h1 className="text-xl font-bold text-white">Process Manager</h1>
       </div>
       <nav className="flex-1 px-2 py-4 overflow-y-auto">
-        {/* Main Navigation */}
         <div className="space-y-1 mb-4">
           {mainNavigation.map((item) => {
             const Icon = item.icon;
@@ -48,10 +47,8 @@ export default function Sidebar() {
           })}
         </div>
 
-        {/* Divider */}
         <div className="border-t border-gray-700 my-4 mx-2"></div>
 
-        {/* Secondary Navigation */}
         <div className="space-y-1">
           {secondaryNavigation.map((item) => {
             const Icon = item.icon;

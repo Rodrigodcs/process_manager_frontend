@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { documentService } from '@/services/documents';
-import { Document, CreateDocumentDto, UpdateDocumentDto } from '@/types';
-import Modal from '@/components/ui/Modal';
-import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
+import Modal from '@/components/ui/Modal';
+import { documentService } from '@/services/documents';
+import { CreateDocumentDto, Document, UpdateDocumentDto } from '@/types';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 interface DocumentModalProps {
@@ -101,11 +101,11 @@ export default function DocumentModal({ isOpen, onClose, document, viewOnly = fa
       <Modal isOpen={isOpen} onClose={onClose} title="">
         <div className="space-y-4">
           <h2 className="text-2xl font-bold text-gray-100">{document.title}</h2>
-          
+
           {document.description && (
             <p className="text-gray-300 leading-relaxed">{document.description}</p>
           )}
-          
+
           {document.url && (
             <a
               href={document.url}

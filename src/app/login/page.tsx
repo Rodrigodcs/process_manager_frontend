@@ -1,14 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Input from '@/components/ui/Input';
+import SignUpModal from '@/components/auth/SignUpModal';
 import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
 import { authService } from '@/services/auth';
 import { useAuthStore } from '@/store/useAuthStore';
 import { SignInDto } from '@/types';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import SignUpModal from '@/components/auth/SignUpModal';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -21,7 +21,6 @@ export default function LoginPage() {
   const [errors, setErrors] = useState<Partial<Record<keyof SignInDto, string>>>({});
   const [showSignUpModal, setShowSignUpModal] = useState(false);
 
-  // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
       router.push('/');
@@ -54,7 +53,7 @@ export default function LoginPage() {
 
     try {
       const response = await authService.signIn(formData);
-      await login(response.token); // Now async - fetches user data from /auth/me
+      await login(response.token);
       toast.success('Login realizado com sucesso!');
       router.push('/');
     } catch (error) {
@@ -68,13 +67,11 @@ export default function LoginPage() {
     <>
       <div className="min-h-screen bg-[#0f1419] flex items-center justify-center p-4">
         <div className="w-full max-w-md">
-          {/* Logo/Title */}
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-white mb-2">Process Manager</h1>
             <p className="text-gray-400">Sistema de Gestão de Processos</p>
           </div>
 
-          {/* Login Card */}
           <div className="bg-gray-800 rounded-lg shadow-xl p-8 border border-gray-700">
             <h2 className="text-2xl font-semibold text-white mb-6">Entrar</h2>
 
@@ -109,7 +106,6 @@ export default function LoginPage() {
               </Button>
             </form>
 
-            {/* Sign Up Link */}
             <div className="mt-6 text-center">
               <p className="text-gray-400 text-sm">
                 Não tem uma conta?{' '}
@@ -123,7 +119,6 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Footer */}
           <p className="text-center text-gray-500 text-sm mt-8">
             © 2026 Process Manager. Todos os direitos reservados.
           </p>

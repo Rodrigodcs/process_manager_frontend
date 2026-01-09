@@ -15,7 +15,6 @@ const pageTitles: Record<string, string> = {
 export default function Header() {
   const pathname = usePathname();
   
-  // Check if we're in a department detail page
   const isDepartmentDetail = pathname.startsWith('/departments/') && pathname !== '/departments';
   
   let title = pageTitles[pathname] || 'Process Manager';

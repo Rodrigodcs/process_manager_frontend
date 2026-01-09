@@ -20,7 +20,6 @@ import {
 import { useRouter } from 'next/navigation';
 import { IconType } from 'react-icons';
 
-// Map icon names to components
 const ICON_MAP: Record<string, IconType> = {
   FiUser,
   FiStar,
@@ -42,7 +41,6 @@ export default function UserMenu() {
   const menuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  // Close menu when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -61,11 +59,9 @@ export default function UserMenu() {
 
   if (!user) return null;
 
-  // Get first letter of name for fallback
   const initial = user.name?.charAt(0).toUpperCase() || 'U';
   const displayColor = user.color || '#3b82f6';
   
-  // Get the icon component
   const IconComponent = user.icon && ICON_MAP[user.icon] ? ICON_MAP[user.icon] : FiUser;
 
   return (

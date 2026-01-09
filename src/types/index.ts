@@ -166,7 +166,6 @@ export interface UpdateDocumentDto {
   url?: string;
 }
 
-// Auth types
 export interface User {
   id: string;
   name: string;

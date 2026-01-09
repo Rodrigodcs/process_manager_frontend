@@ -1,27 +1,27 @@
 'use client';
 
-import { useState } from 'react';
-import Modal from '@/components/ui/Modal';
-import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
+import Modal from '@/components/ui/Modal';
 import { authService } from '@/services/auth';
 import { SignUpDto } from '@/types';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { 
-  FiUser, 
-  FiStar, 
-  FiHeart, 
-  FiSmile, 
-  FiZap, 
-  FiCoffee,
-  FiTrendingUp,
-  FiTarget,
+import { IconType } from 'react-icons';
+import {
   FiAward,
   FiCode,
+  FiCoffee,
   FiCommand,
   FiCpu,
+  FiHeart,
+  FiSmile,
+  FiStar,
+  FiTarget,
+  FiTrendingUp,
+  FiUser,
+  FiZap,
 } from 'react-icons/fi';
-import { IconType } from 'react-icons';
 
 interface SignUpModalProps {
   isOpen: boolean;
@@ -99,8 +99,7 @@ export default function SignUpModal({ isOpen, onClose, onSuccess }: SignUpModalP
       toast.success('Conta criada com sucesso! Faça login para continuar.');
       onSuccess();
       onClose();
-      
-      // Reset form
+
       setFormData({
         name: '',
         email: '',
@@ -159,11 +158,10 @@ export default function SignUpModal({ isOpen, onClose, onSuccess }: SignUpModalP
                 key={color.value}
                 type="button"
                 onClick={() => setFormData({ ...formData, color: color.value })}
-                className={`w-10 h-10 rounded-full transition-all ${
-                  formData.color === color.value
-                    ? 'ring-2 ring-white ring-offset-2 ring-offset-gray-800 scale-110'
-                    : 'hover:scale-105'
-                }`}
+                className={`w-10 h-10 rounded-full transition-all ${formData.color === color.value
+                  ? 'ring-2 ring-white ring-offset-2 ring-offset-gray-800 scale-110'
+                  : 'hover:scale-105'
+                  }`}
                 style={{ backgroundColor: color.value }}
                 title={color.name}
               />
@@ -183,11 +181,10 @@ export default function SignUpModal({ isOpen, onClose, onSuccess }: SignUpModalP
                   key={iconItem.value}
                   type="button"
                   onClick={() => setFormData({ ...formData, icon: iconItem.value })}
-                  className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all ${
-                    formData.icon === iconItem.value
-                      ? 'bg-gray-600 ring-2 ring-white scale-110'
-                      : 'bg-gray-700 hover:bg-gray-600 hover:scale-105'
-                  }`}
+                  className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all ${formData.icon === iconItem.value
+                    ? 'bg-gray-600 ring-2 ring-white scale-110'
+                    : 'bg-gray-700 hover:bg-gray-600 hover:scale-105'
+                    }`}
                   title={iconItem.name}
                 >
                   <Icon className="w-6 h-6 text-gray-100" />

@@ -22,7 +22,6 @@ export default function PeoplePage() {
   const [page, setPage] = useState(1);
   const queryClient = useQueryClient();
 
-  // Debounce search input - only triggers after 0.5 seconds of no typing
   const debouncedSearch = useDebounce(searchInput, 500);
 
   const { data: peopleData, isLoading } = useQuery({

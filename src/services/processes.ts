@@ -43,7 +43,6 @@ export const processService = {
     await api.delete(`/processes/${id}`);
   },
 
-  // People relationships
   async getPeople(processId: string): Promise<Person[]> {
     const { data } = await api.get<Person[]>(`/processes/${processId}/people`);
     return data;
@@ -58,7 +57,6 @@ export const processService = {
     await api.delete(`/processes/${processId}/people/${personId}`);
   },
 
-  // Tools relationships
   async getTools(processId: string): Promise<Tool[]> {
     const { data } = await api.get<Tool[]>(`/processes/${processId}/tools`);
     return data;
@@ -73,7 +71,6 @@ export const processService = {
     await api.delete(`/processes/${processId}/tools/${toolId}`);
   },
 
-  // Documents relationships
   async getDocuments(processId: string): Promise<Document[]> {
     const { data } = await api.get<Document[]>(`/processes/${processId}/documents`);
     return data;

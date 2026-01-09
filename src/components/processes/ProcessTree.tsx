@@ -3,7 +3,7 @@
 import { processService } from '@/services/processes';
 import { Process, ProcessStatus, ProcessType } from '@/types';
 import { useQuery } from '@tanstack/react-query';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
     FiAlertCircle,
     FiCheckCircle,
@@ -57,27 +57,24 @@ export default function ProcessTree({
     onToggleExpand,
 }: ProcessTreeProps) {
     const [internalExpanded, setInternalExpanded] = useState(false);
-    
-    // Use external state if provided, otherwise use internal state
+
     const isExpanded = expandedProcessIds ? expandedProcessIds.has(process.id) : internalExpanded;
 
-    // Fetch children when expanded
     const { data: children = [], isLoading, refetch } = useQuery<Process[]>({
         queryKey: ['process-children', process.id],
         queryFn: () => processService.getChildren(process.id),
         enabled: isExpanded,
-        refetchOnMount: 'always', // Always refetch when component mounts
+        refetchOnMount: 'always',
     });
 
-    // Force refetch when expanding to get fresh data
     useEffect(() => {
         if (isExpanded) {
             refetch();
         }
     }, [isExpanded, refetch]);
 
-    const hasChildren = 
-        (process.children && process.children.length > 0) || 
+    const hasChildren =
+        (process.children && process.children.length > 0) ||
         (process.childrenIds && process.childrenIds.length > 0);
     const canExpand = hasChildren || (isExpanded && children.length > 0);
     const isSelected = selectedProcessId === process.id;
@@ -95,7 +92,6 @@ export default function ProcessTree({
     };
 
     const handleSelectProcess = () => {
-        // Expand the process if it has children
         if (hasChildren && !isExpanded) {
             if (onToggleExpand) {
                 onToggleExpand(process.id);
@@ -103,7 +99,6 @@ export default function ProcessTree({
                 setInternalExpanded(true);
             }
         }
-        // Open the detail panel
         onSelectProcess(process);
     };
 
@@ -111,7 +106,6 @@ export default function ProcessTree({
 
     return (
         <div>
-            {/* Process Item */}
             <div
                 className={`
           flex items-center gap-2 px-3 py-2.5 rounded-lg cursor-pointer transition-all group
@@ -120,7 +114,6 @@ export default function ProcessTree({
                 style={{ paddingLeft: `${paddingLeft + 12}px` }}
                 onClick={handleSelectProcess}
             >
-                {/* Expand/Collapse Button */}
                 {canExpand ? (
                     <button
                         onClick={handleToggleExpand}
@@ -136,12 +129,10 @@ export default function ProcessTree({
                     <div className="w-5" />
                 )}
 
-                {/* Type Icon */}
                 <div className={`flex items-center justify-center w-6 h-6 ${statusColor}`}>
                     <TypeIcon className="w-4 h-4" />
                 </div>
 
-                {/* Process Name */}
                 <div className="flex-1 min-w-0">
                     <p
                         className={`font-medium truncate ${isSelected ? 'text-white' : 'text-gray-200 group-hover:text-white'
@@ -151,26 +142,22 @@ export default function ProcessTree({
                     </p>
                 </div>
 
-                {/* Badges and Actions */}
                 <div className="flex items-center gap-2">
-                    {/* Type Badge */}
                     <span
                         className={`px-2 py-0.5 rounded text-xs ${process.type === ProcessType.SYSTEMIC
-                                ? 'bg-blue-500/20 text-blue-400'
-                                : 'bg-purple-500/20 text-purple-400'
+                            ? 'bg-blue-500/20 text-blue-400'
+                            : 'bg-purple-500/20 text-purple-400'
                             }`}
                     >
                         {TYPE_LABELS[process.type]}
                     </span>
 
-                    {/* Status Badge */}
                     <div className={`flex items-center ${statusColor}`} title={STATUS_LABELS[process.status]}>
                         {process.status === ProcessStatus.ACTIVE && <FiCheckCircle className="w-4 h-4" />}
                         {process.status === ProcessStatus.IN_REVIEW && <FiAlertCircle className="w-4 h-4" />}
                         {process.status === ProcessStatus.DEPRECATED && <FiXCircle className="w-4 h-4" />}
                     </div>
 
-                    {/* Add Subprocess Button */}
                     {onAddSubprocess && (
                         <button
                             onClick={(e) => {
@@ -186,7 +173,6 @@ export default function ProcessTree({
                 </div>
             </div>
 
-            {/* Children */}
             {isExpanded && (
                 <div className="mt-1">
                     {isLoading ? (
