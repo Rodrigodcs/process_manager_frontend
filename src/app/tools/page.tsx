@@ -3,6 +3,7 @@
 import ToolModal from '@/components/tools/ToolModal';
 import Button from '@/components/ui/Button';
 import Card, { CardBody } from '@/components/ui/Card';
+import ConfirmModal from '@/components/ui/ConfirmModal';
 import EmptyState from '@/components/ui/EmptyState';
 import Input from '@/components/ui/Input';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
@@ -18,6 +19,10 @@ import { FiEdit2, FiExternalLink, FiPlus, FiSearch, FiTool, FiTrash2 } from 'rea
 export default function ToolsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTool, setEditingTool] = useState<Tool | null>(null);
+  const [deleteConfirmModal, setDeleteConfirmModal] = useState<{
+    isOpen: boolean;
+    tool: Tool | null;
+  }>({ isOpen: false, tool: null });
   const [searchInput, setSearchInput] = useState('');
   const [page, setPage] = useState(1);
   const queryClient = useQueryClient();
@@ -35,15 +40,20 @@ export default function ToolsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tools'] });
       toast.success('Ferramenta excluída com sucesso!');
+      setDeleteConfirmModal({ isOpen: false, tool: null });
     },
     onError: (error: Error) => {
       toast.error(error.message || 'Erro ao excluir ferramenta');
     },
   });
 
-  const handleDelete = (id: string) => {
-    if (confirm('Tem certeza que deseja excluir esta ferramenta?')) {
-      deleteMutation.mutate(id);
+  const handleDelete = (tool: Tool) => {
+    setDeleteConfirmModal({ isOpen: true, tool });
+  };
+
+  const confirmDelete = () => {
+    if (deleteConfirmModal.tool) {
+      deleteMutation.mutate(deleteConfirmModal.tool.id);
     }
   };
 
@@ -179,11 +189,14 @@ export default function ToolsPage() {
                             <FiEdit2 className="w-4 h-4" />
                           </button>
                           <button
-                            onClick={() => handleDelete(tool.id)}
-                            className="text-gray-400 hover:text-red-500 transition-colors"
-                          >
-                            <FiTrash2 className="w-4 h-4" />
-                          </button>
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
+                              handleDelete(tool);
+                            }}
+                            className="p-2 text-gray-400 hover:text-red-500 transition-colors rounded-lg"
+                            title="Excluir"
+                          ><FiTrash2 className="w-4 h-4" /></button>
                         </div>
                       </td>
                     </tr>
@@ -223,6 +236,18 @@ export default function ToolsPage() {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         tool={editingTool}
+      />
+
+      <ConfirmModal
+        isOpen={deleteConfirmModal.isOpen}
+        onClose={() => setDeleteConfirmModal({ isOpen: false, tool: null })}
+        onConfirm={confirmDelete}
+        title="Excluir Ferramenta"
+        message={`Tem certeza que deseja excluir a ferramenta "${deleteConfirmModal.tool?.name}"? Esta ação não pode ser desfeita.`}
+        confirmText="Excluir"
+        cancelText="Cancelar"
+        isLoading={deleteMutation.isPending}
+        variant="danger"
       />
     </div>
   );

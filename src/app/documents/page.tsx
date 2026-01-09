@@ -3,6 +3,7 @@
 import DocumentModal from '@/components/documents/DocumentModal';
 import Button from '@/components/ui/Button';
 import Card, { CardBody } from '@/components/ui/Card';
+import ConfirmModal from '@/components/ui/ConfirmModal';
 import EmptyState from '@/components/ui/EmptyState';
 import Input from '@/components/ui/Input';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
@@ -18,6 +19,10 @@ import { FiEdit2, FiExternalLink, FiFileText, FiPlus, FiSearch, FiTrash2 } from 
 export default function DocumentsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingDocument, setEditingDocument] = useState<Document | null>(null);
+  const [deleteConfirmModal, setDeleteConfirmModal] = useState<{
+    isOpen: boolean;
+    document: Document | null;
+  }>({ isOpen: false, document: null });
   const [searchInput, setSearchInput] = useState('');
   const [page, setPage] = useState(1);
   const queryClient = useQueryClient();
@@ -41,9 +46,13 @@ export default function DocumentsPage() {
     },
   });
 
-  const handleDelete = (id: string) => {
-    if (confirm('Tem certeza que deseja excluir este documento?')) {
-      deleteMutation.mutate(id);
+  const handleDelete = (document: Document) => {
+    setDeleteConfirmModal({ isOpen: true, document });
+  };
+
+  const confirmDelete = () => {
+    if (deleteConfirmModal.document) {
+      deleteMutation.mutate(deleteConfirmModal.document.id);
     }
   };
 
@@ -179,11 +188,14 @@ export default function DocumentsPage() {
                             <FiEdit2 className="w-4 h-4" />
                           </button>
                           <button
-                            onClick={() => handleDelete(document.id)}
-                            className="text-gray-400 hover:text-red-500 transition-colors"
-                          >
-                            <FiTrash2 className="w-4 h-4" />
-                          </button>
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
+                              handleDelete(document);
+                            }}
+                            className="p-2 text-gray-400 hover:text-red-500 transition-colors rounded-lg"
+                            title="Excluir"
+                          ><FiTrash2 className="w-4 h-4" /></button>
                         </div>
                       </td>
                     </tr>
@@ -223,6 +235,18 @@ export default function DocumentsPage() {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         document={editingDocument}
+      />
+
+      <ConfirmModal
+        isOpen={deleteConfirmModal.isOpen}
+        onClose={() => setDeleteConfirmModal({ isOpen: false, document: null })}
+        onConfirm={confirmDelete}
+        title="Excluir Documento"
+        message={`Tem certeza que deseja excluir o documento "${deleteConfirmModal.document?.title}"? Esta ação não pode ser desfeita.`}
+        confirmText="Excluir"
+        cancelText="Cancelar"
+        isLoading={deleteMutation.isPending}
+        variant="danger"
       />
     </div>
   );

@@ -40,6 +40,7 @@ export default function PeoplePage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['people'] });
       toast.success('Pessoa excluída com sucesso!');
+      setDeleteConfirmModal({ isOpen: false, person: null });
     },
     onError: (error: Error) => {
       toast.error(error.message || 'Erro ao excluir pessoa');
