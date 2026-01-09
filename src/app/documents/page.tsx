@@ -40,6 +40,7 @@ export default function DocumentsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['documents'] });
       toast.success('Documento excluído com sucesso!');
+      setDeleteConfirmModal({ isOpen: false, document: null });
     },
     onError: (error: Error) => {
       toast.error(error.message || 'Erro ao excluir documento');
