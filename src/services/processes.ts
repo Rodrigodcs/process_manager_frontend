@@ -39,6 +39,14 @@ export const processService = {
     return data;
   },
 
+  async reorderChildren(parentId: string, processIds: string[]): Promise<Process[]> {
+    const { data } = await api.patch<Process[]>(
+      `/processes/${parentId}/children/reorder`,
+      { processIds }
+    );
+    return data;
+  },
+
   async delete(id: string): Promise<void> {
     await api.delete(`/processes/${id}`);
   },
