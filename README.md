@@ -4,7 +4,7 @@ Frontend da aplicação Process Manager - Sistema de gestão de processos desenv
 
 ## 🔧 Deploy em Produção
 
-`https://process-manager-frontend-6jkw72cn4-rodrigo-schmidts-projects.vercel.app/`
+`https://process-manager-frontend.vercel.app`
 
 <br>
 
