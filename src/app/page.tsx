@@ -144,11 +144,10 @@ export default function Home() {
                             <Link
                                 key={card.href}
                                 href={card.href}
-                                className={`group block p-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-200 border ${
-                                    card.highlighted
+                                className={`group block p-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-200 border ${card.highlighted
                                         ? 'bg-gradient-to-br from-blue-500/20 to-blue-600/10 border-blue-500 hover:border-blue-400 ring-2 ring-blue-500/50'
                                         : 'bg-gray-800 border-gray-700 hover:border-gray-600'
-                                }`}
+                                    }`}
                             >
                                 <div className="flex items-start justify-between mb-3">
                                     <div className={`inline-flex p-2 rounded-lg ${card.color} text-white`}>
@@ -156,9 +155,8 @@ export default function Home() {
                                     </div>
                                     <span className="text-2xl font-bold text-gray-100">{card.count}</span>
                                 </div>
-                                <h3 className={`text-base font-semibold mb-1 transition-colors ${
-                                    card.highlighted ? 'text-blue-300' : 'text-gray-100 group-hover:text-gray-50'
-                                }`}>
+                                <h3 className={`text-base font-semibold mb-1 transition-colors ${card.highlighted ? 'text-blue-300' : 'text-gray-100 group-hover:text-gray-50'
+                                    }`}>
                                     {card.title}
                                 </h3>
                                 <p className="text-xs text-gray-400">{card.description}</p>

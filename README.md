@@ -2,11 +2,13 @@
 
 Frontend da aplicação Process Manager - Sistema de gestão de processos desenvolvido com Next.js 14, React, TypeScript e TailwindCSS.
 
+<br>
+
 ## 📋 Pré-requisitos
 
 - Node.js 18+ instalado
 - npm ou yarn
-- Backend rodando em `http://localhost:3000`
+- Backend rodando em `http://localhost:8080`
 
 ## 🔧 Instalação
 
@@ -18,15 +20,13 @@ npm install
 
 2. **Configurar variáveis de ambiente** (Opcional)
 
-Crie um arquivo `.env.local` na raiz do projeto frontend se precisar customizar a URL da API:
+Crie um arquivo `.env.local` na raiz do projeto frontend:
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:8080
 ```
 
-> **Nota:** Por padrão, o frontend já está configurado para acessar `http://localhost:3000`
-
-## ▶️ Executar o Projeto
+### ▶️ Executar o Projeto
 
 ### Modo desenvolvimento
 
@@ -34,4 +34,4 @@ NEXT_PUBLIC_API_URL=http://localhost:3000
 npm run dev
 ```
 
-O frontend estará disponível em: `http://localhost:3001`
+O frontend estará disponível em: `http://localhost:3000`
