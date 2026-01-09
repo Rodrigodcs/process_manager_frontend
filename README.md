@@ -2,6 +2,10 @@
 
 Frontend da aplicação Process Manager - Sistema de gestão de processos desenvolvido com Next.js 14, React, TypeScript e TailwindCSS.
 
+## 🔧 Deploy em Produção
+
+`https://process-manager-frontend-6jkw72cn4-rodrigo-schmidts-projects.vercel.app/`
+
 <br>
 
 ## 📋 Pré-requisitos

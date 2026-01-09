@@ -9,6 +9,9 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Process Manager',
   description: 'Sistema de gestão de processos organizacionais, departamentos e fluxos de trabalho',
+  icons: {
+    icon: '/icon.svg',
+  },
 };
 
 export default function RootLayout({
