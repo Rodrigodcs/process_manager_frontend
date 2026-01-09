@@ -8,11 +8,17 @@ Frontend da aplicação Process Manager - Sistema de gestão de processos desenv
 
 <br>
 
+## 🔧 Repositório do servidor
+
+ - `https://github.com/Rodrigodcs/process_manager_backend`
+
+<br>
+
 ## 📋 Pré-requisitos
 
 - Node.js 18+ instalado
 - npm ou yarn
-- Backend rodando em `http://localhost:8080`
+- Backend (`https://github.com/Rodrigodcs/process_manager_backend`) rodando em `http://localhost:8080` 
 
 ## 🔧 Instalação
 
