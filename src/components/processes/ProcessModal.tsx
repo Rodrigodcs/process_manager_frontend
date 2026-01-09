@@ -244,6 +244,7 @@ export default function ProcessModal({
           <Button
             type="submit"
             isLoading={createMutation.isPending || updateMutation.isPending}
+            variant="success"
           >
             {process ? 'Atualizar' : 'Criar'}
           </Button>

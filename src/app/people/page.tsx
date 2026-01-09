@@ -3,6 +3,7 @@
 import PersonModal from '@/components/people/PersonModal';
 import Button from '@/components/ui/Button';
 import Card, { CardBody } from '@/components/ui/Card';
+import ConfirmModal from '@/components/ui/ConfirmModal';
 import EmptyState from '@/components/ui/EmptyState';
 import Input from '@/components/ui/Input';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
@@ -18,6 +19,10 @@ import { FiEdit2, FiMail, FiPlus, FiSearch, FiTrash2, FiUsers } from 'react-icon
 export default function PeoplePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPerson, setEditingPerson] = useState<Person | null>(null);
+  const [deleteConfirmModal, setDeleteConfirmModal] = useState<{
+    isOpen: boolean;
+    person: Person | null;
+  }>({ isOpen: false, person: null });
   const [searchInput, setSearchInput] = useState('');
   const [page, setPage] = useState(1);
   const queryClient = useQueryClient();
@@ -41,9 +46,13 @@ export default function PeoplePage() {
     },
   });
 
-  const handleDelete = (id: string) => {
-    if (confirm('Tem certeza que deseja excluir esta pessoa?')) {
-      deleteMutation.mutate(id);
+  const handleDelete = (person: Person) => {
+    setDeleteConfirmModal({ isOpen: true, person });
+  };
+
+  const confirmDelete = () => {
+    if (deleteConfirmModal.person) {
+      deleteMutation.mutate(deleteConfirmModal.person.id);
     }
   };
 
@@ -172,11 +181,14 @@ export default function PeoplePage() {
                             <FiEdit2 className="w-4 h-4" />
                           </button>
                           <button
-                            onClick={() => handleDelete(person.id)}
-                            className="text-gray-400 hover:text-red-500 transition-colors"
-                          >
-                            <FiTrash2 className="w-4 h-4" />
-                          </button>
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
+                              handleDelete(person);
+                            }}
+                            className="p-2 text-gray-400 hover:text-red-500 transition-colors rounded-lg"
+                            title="Excluir"
+                          ><FiTrash2 className="w-4 h-4" /></button>
                         </div>
                       </td>
                     </tr>
@@ -216,6 +228,18 @@ export default function PeoplePage() {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         person={editingPerson}
+      />
+
+      <ConfirmModal
+        isOpen={deleteConfirmModal.isOpen}
+        onClose={() => setDeleteConfirmModal({ isOpen: false, person: null })}
+        onConfirm={confirmDelete}
+        title="Excluir Pessoa"
+        message={`Tem certeza que deseja excluir a pessoa "${deleteConfirmModal.person?.name}"? Esta ação não pode ser desfeita.`}
+        confirmText="Excluir"
+        cancelText="Cancelar"
+        isLoading={deleteMutation.isPending}
+        variant="danger"
       />
     </div>
   );

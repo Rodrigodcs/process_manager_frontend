@@ -2,8 +2,10 @@
 
 import { processService } from '@/services/processes';
 import { Process, ProcessStatus, ProcessType } from '@/types';
-import { useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Reorder } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { toast } from 'react-hot-toast';
 import {
     FiAlertCircle,
     FiCheckCircle,
@@ -57,10 +59,12 @@ export default function ProcessTree({
     onToggleExpand,
 }: ProcessTreeProps) {
     const [internalExpanded, setInternalExpanded] = useState(false);
+    const [children, setChildren] = useState<Process[]>([]);
+    const queryClient = useQueryClient();
 
     const isExpanded = expandedProcessIds ? expandedProcessIds.has(process.id) : internalExpanded;
 
-    const { data: children = [], isLoading, refetch } = useQuery<Process[]>({
+    const { data: fetchedChildren = [], isLoading, refetch } = useQuery<Process[]>({
         queryKey: ['process-children', process.id],
         queryFn: () => processService.getChildren(process.id),
         enabled: isExpanded,
@@ -69,9 +73,50 @@ export default function ProcessTree({
 
     useEffect(() => {
         if (isExpanded) {
+            setChildren(fetchedChildren);
+        } else {
+            setChildren([]);
+        }
+    }, [isExpanded, fetchedChildren]);
+
+    useEffect(() => {
+        if (isExpanded) {
             refetch();
         }
     }, [isExpanded, refetch]);
+
+    const [isDragging, setIsDragging] = useState(false);
+    const pendingOrderRef = useRef<Process[] | null>(null);
+
+    const reorderMutation = useMutation({
+        mutationFn: (newOrder: Process[]) => {
+            const processIds = newOrder.map(p => p.id);
+            return processService.reorderChildren(process.id, processIds);
+        },
+        onSuccess: (updatedChildren) => {
+            setChildren(updatedChildren);
+            queryClient.invalidateQueries({ queryKey: ['process-children', process.id] });
+            queryClient.invalidateQueries({ queryKey: ['process-children'] });
+            toast.success('Ordem dos subprocessos atualizada!');
+        },
+        onError: (error: Error) => {
+            toast.error(error.message || 'Erro ao reordenar subprocessos');
+            refetch();
+        },
+    });
+
+    const handleReorder = (newOrder: Process[]) => {
+        setChildren(newOrder);
+        pendingOrderRef.current = newOrder;
+    };
+
+    const handleDragEnd = () => {
+        setIsDragging(false);
+        if (pendingOrderRef.current) {
+            reorderMutation.mutate(pendingOrderRef.current);
+            pendingOrderRef.current = null;
+        }
+    };
 
     const hasChildren =
         (process.children && process.children.length > 0) ||
@@ -106,6 +151,7 @@ export default function ProcessTree({
 
     return (
         <div>
+            {/* Process Item */}
             <div
                 className={`
           flex items-center gap-2 px-3 py-2.5 rounded-lg cursor-pointer transition-all group
@@ -114,6 +160,7 @@ export default function ProcessTree({
                 style={{ paddingLeft: `${paddingLeft + 12}px` }}
                 onClick={handleSelectProcess}
             >
+                {/* Expand/Collapse Button */}
                 {canExpand ? (
                     <button
                         onClick={handleToggleExpand}
@@ -129,10 +176,12 @@ export default function ProcessTree({
                     <div className="w-5" />
                 )}
 
+                {/* Type Icon */}
                 <div className={`flex items-center justify-center w-6 h-6 ${statusColor}`}>
                     <TypeIcon className="w-4 h-4" />
                 </div>
 
+                {/* Process Name */}
                 <div className="flex-1 min-w-0">
                     <p
                         className={`font-medium truncate ${isSelected ? 'text-white' : 'text-gray-200 group-hover:text-white'
@@ -142,7 +191,9 @@ export default function ProcessTree({
                     </p>
                 </div>
 
+                {/* Badges and Actions */}
                 <div className="flex items-center gap-2">
+                    {/* Type Badge */}
                     <span
                         className={`px-2 py-0.5 rounded text-xs ${process.type === ProcessType.SYSTEMIC
                             ? 'bg-blue-500/20 text-blue-400'
@@ -152,12 +203,14 @@ export default function ProcessTree({
                         {TYPE_LABELS[process.type]}
                     </span>
 
+                    {/* Status Badge */}
                     <div className={`flex items-center ${statusColor}`} title={STATUS_LABELS[process.status]}>
                         {process.status === ProcessStatus.ACTIVE && <FiCheckCircle className="w-4 h-4" />}
                         {process.status === ProcessStatus.IN_REVIEW && <FiAlertCircle className="w-4 h-4" />}
                         {process.status === ProcessStatus.DEPRECATED && <FiXCircle className="w-4 h-4" />}
                     </div>
 
+                    {/* Add Subprocess Button */}
                     {onAddSubprocess && (
                         <button
                             onClick={(e) => {
@@ -173,6 +226,7 @@ export default function ProcessTree({
                 </div>
             </div>
 
+            {/* Children */}
             {isExpanded && (
                 <div className="mt-1">
                     {isLoading ? (
@@ -184,18 +238,37 @@ export default function ProcessTree({
                             Carregando...
                         </div>
                     ) : children.length > 0 ? (
-                        children.map((child) => (
-                            <ProcessTree
-                                key={child.id}
-                                process={child}
-                                selectedProcessId={selectedProcessId}
-                                onSelectProcess={onSelectProcess}
-                                onAddSubprocess={onAddSubprocess}
-                                level={level + 1}
-                                expandedProcessIds={expandedProcessIds}
-                                onToggleExpand={onToggleExpand}
-                            />
-                        ))
+                        <Reorder.Group
+                            axis="y"
+                            values={children}
+                            onReorder={handleReorder}
+                            className="space-y-1"
+                        >
+                            {children.map((child) => (
+                                <Reorder.Item
+                                    key={child.id}
+                                    value={child}
+                                    onDragStart={() => setIsDragging(true)}
+                                    onDragEnd={handleDragEnd}
+                                    whileDrag={{
+                                        scale: 1.02,
+                                        opacity: 0.8,
+                                        boxShadow: '0 10px 20px rgba(0,0,0,0.3)',
+                                    }}
+                                    className="cursor-grab active:cursor-grabbing"
+                                >
+                                    <ProcessTree
+                                        process={child}
+                                        selectedProcessId={selectedProcessId}
+                                        onSelectProcess={onSelectProcess}
+                                        onAddSubprocess={onAddSubprocess}
+                                        level={level + 1}
+                                        expandedProcessIds={expandedProcessIds}
+                                        onToggleExpand={onToggleExpand}
+                                    />
+                                </Reorder.Item>
+                            ))}
+                        </Reorder.Group>
                     ) : (
                         <div
                             className="px-3 py-2 text-gray-500 text-sm italic"

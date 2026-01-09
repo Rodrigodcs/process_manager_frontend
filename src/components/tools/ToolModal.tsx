@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { toolService } from '@/services/tools';
-import { Tool, CreateToolDto, UpdateToolDto } from '@/types';
-import Modal from '@/components/ui/Modal';
-import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
+import Modal from '@/components/ui/Modal';
+import { toolService } from '@/services/tools';
+import { CreateToolDto, Tool, UpdateToolDto } from '@/types';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 interface ToolModalProps {
@@ -101,11 +101,11 @@ export default function ToolModal({ isOpen, onClose, tool, viewOnly = false }: T
       <Modal isOpen={isOpen} onClose={onClose} title="">
         <div className="space-y-4">
           <h2 className="text-2xl font-bold text-gray-100">{tool.name}</h2>
-          
+
           {tool.description && (
             <p className="text-gray-300 leading-relaxed">{tool.description}</p>
           )}
-          
+
           {tool.url && (
             <a
               href={tool.url}
@@ -172,6 +172,7 @@ export default function ToolModal({ isOpen, onClose, tool, viewOnly = false }: T
           <Button
             type="submit"
             isLoading={createMutation.isPending || updateMutation.isPending}
+            variant="success"
           >
             {tool ? 'Atualizar' : 'Criar'}
           </Button>

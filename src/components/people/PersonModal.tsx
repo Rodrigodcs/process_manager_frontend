@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { personService } from '@/services/people';
-import { Person, CreatePersonDto, UpdatePersonDto } from '@/types';
-import Modal from '@/components/ui/Modal';
-import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
+import Modal from '@/components/ui/Modal';
+import { personService } from '@/services/people';
+import { CreatePersonDto, Person, UpdatePersonDto } from '@/types';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 interface PersonModalProps {
@@ -102,11 +102,11 @@ export default function PersonModal({ isOpen, onClose, person, viewOnly = false 
       <Modal isOpen={isOpen} onClose={onClose} title="">
         <div className="space-y-4">
           <h2 className="text-2xl font-bold text-gray-100">{person.name}</h2>
-          
+
           {person.role && (
             <p className="text-gray-300 text-lg">{person.role}</p>
           )}
-          
+
           {person.email && (
             <a
               href={`mailto:${person.email}`}
@@ -166,6 +166,7 @@ export default function PersonModal({ isOpen, onClose, person, viewOnly = false 
           <Button
             type="submit"
             isLoading={createMutation.isPending || updateMutation.isPending}
+            variant="success"
           >
             {person ? 'Atualizar' : 'Criar'}
           </Button>

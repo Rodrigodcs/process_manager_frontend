@@ -198,7 +198,7 @@ export default function SignUpModal({ isOpen, onClose, onSuccess }: SignUpModalP
           <Button type="button" variant="secondary" onClick={onClose}>
             Cancelar
           </Button>
-          <Button type="submit" variant="primary" isLoading={isLoading}>
+          <Button type="submit" variant="success" isLoading={isLoading}>
             Criar Conta
           </Button>
         </div>

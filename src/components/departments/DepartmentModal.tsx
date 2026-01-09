@@ -229,6 +229,7 @@ export default function DepartmentModal({ isOpen, onClose, department }: Departm
           <Button
             type="submit"
             isLoading={createMutation.isPending || updateMutation.isPending}
+            variant="success"
           >
             {department ? 'Atualizar' : 'Criar'}
           </Button>
